@@ -29,10 +29,11 @@ public class RocketMQTest {
 	
 	@Test
 	public void testProduceMessage() throws MQClientException, RemotingException, MQBrokerException, InterruptedException{
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 1; i++){
            //创建一个消息实例，包含 topic、tag 和 消息体,如下：topic 为 "TopicTest"，tag 为 "push"
-		   String content = "hello gaoweigang-" + i;
+		   String content = "hello gaoweigang-" + System.currentTimeMillis();
            Message message = new Message("TopicTest", "tagA", content.getBytes());
+           message.setKeys("ORDERID_100");//业务唯一标识作为幂等处理的关键依据
            logger.info(" hello ：{}", JSON.toJSON(message));
            SendResult result = producer.send(message);
            logger.info("发送响应：MsgId:" + result.getMsgId() + "，发送状态:" + result.getSendStatus());
